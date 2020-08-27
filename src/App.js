@@ -2,8 +2,22 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const Todo =({ todo })=><div className="todo">{todo.text}</div>
+//const Todo =({ todo })=><div className="todo">{todo.text}</div>
+function Todo({todo, index, completeTodo}) {
+  return (
+    <div
+      className="todo"
+      style={{textDecoration:todo.isCompleted ? "line-through":""}}
+    >
+      {todo.text}
+      <div>
+        <button onClick={()=>completeTodo(index)}>Complete</button>
+      </div>
+    </div>
 
+  );
+  
+}
 function TodoForm({ addToDo }) {
   const [value, setValue] = useState("");
 
@@ -27,33 +41,49 @@ function TodoForm({ addToDo }) {
   );
 }
 
+
 function App(){
-  const [todos, setTodos] = useState([
-    { text:"Learn about react" },
-    {text: "work rom 9 am"},
-    {text:"develop people react app"}
+  const [todos,setTodos] = useState([
+    {
+      text:"work from 9 am",
+      isCompleted:false
+    },
+    {
+      text:"study react concepts",
+      isCompleted:false
+    },
+    {
+      text:"build people application",
+      isCompleted:false
+    }
   ]);
 
-  const addToDo = text=>{
-    const newTodos = [...todos,{ text }];
+  const addToDo = text => {
+    const newTodos = [...todos,{text}];
     setTodos(newTodos);
   };
+
+  const completeTodo = index => {
+    const newTodos = [...todos]
+    newTodos[index].isCompleted = true;
+    setTodos(newTodos);
+  }
+
   return(
     <div className="app">
       <div className="todo-list">
-      
-      <TodoForm addToDo={addToDo}/>
-
-        {todos.map((todo,index)=>(
+      {todos.map((todo, index) => (
           <Todo
-            key={index}
-            index={index}
-            todo={todo}
+              key={index}
+              index={index}
+              todo={todo}
+              completeTodo={completeTodo}
           />
-        ))}
+       ))}
+       <TodoForm addToDo={addToDo}/>
       </div>
     </div>
-
-  );
+  )
 }
+  
 export default App;
